@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>reveal.js - The HTML Presentation Framework</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h1>Sailsjs</h1>
+					<h2>Making Nodejs backends a breeze</h2>
+				</section>
+				
+				<section>
+					<h2>Chuck Rolek</h2>
+					<h3>Front-end Development</h3>
+					<h3>and Infrastructure (DevOps)</h3>
+				</section>
+
+				<section>
+					<h3>Principal Financial Group</h3>
+					<h3>Front-end Development team</h3>
+					<ul>
+						<li>Front-end architecture</li>
+						<li>Component development</li>
+						<li>Training</li>
+						<li>Infrastructure integration</li>
+						<li>Continuous Integration and app deployment</li>
+						<li>UX Support</li>
+					</ul>
+					<br></br>
+					<h3>IowaComputerGurus</h3>
+					<h3>User Experience and Efficiency Engineer</h3>
+					<ul>
+						<li>Posting sensor data from an Arduino to a server</li>
+						<li>Receiving data and sending it to hardware</li>
+						<li>Cordova development</li>
+					</ul>
+				</section>
+
+				<section>
+					<section>
+						<h2>The Problem</h2>
+						<ul>
+							<li>Separated development and integration</li>
+							<li>Needed some way to make quick backends</li>
+							<li>Tried a few Nodejs REST frameworks and didn't like them</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Sails to the rescue!</h2>
+						<ul>
+							<li>Generating a project is fast</li>
+							<li>Global and local configuration</li>
+							<li>Easy out of the box or highly flexiable</li>
+						</ul>
+						<br></br>
+						<h5>Disclaimer: I'm not a Sails expert</h5>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>What I'll cover</h2>
+						<ul>
+							<li><a target="_blank" href="http://sailsjs.org/documentation/concepts/">Sails Documentation</a></li>
+							<li>Creating a quick project and endpoint</li>
+							<li>Config settings</li>
+							<li>Endpoints</li>
+							<li>ORM (Waterline)</li>
+						</ul>
+					</section>
+					<!-- <section>
+						<h2>Quick note before we get to far</h2>
+						<p>This presentation is design for people who have basic undestanding of:</p>
+						<ul>
+							<li>Nodejs</li>
+							<li>NPM and installing a package</li>
+							<li>REST</li>
+							<li>Data modeling</li>
+						</ul>
+					</section> -->
+				</section>
+
+				<section>
+					<h2>Creating a quick project</h2>
+					<ol>
+						<li><a target="_blank" href="http://sailsjs.org/get-started">Installing Sails</a></li>
+						<li><pre><code>sails new midwestjs</code></pre></li>
+						<li><pre><code>cd midwestjs</code></pre></li>
+						<li><pre><code>sails lift</code></pre></li>
+						<li><a target="_blank" href="http://localhost:1337">Go to http://localhost:1337/</a></li>
+					</ol>
+
+				</section>
+				<section>
+					<section>
+						<h2>Lets pause for configuration</h2>
+						<ul>
+							<li>We'll use MySQL so we need to install the adapater</li>
+							<li>To install run:</li>
+							<pre><code>npm install sails-mysql</code></pre>
+							<li>Let's configure this for WAMP's MySQL</li>
+<pre><code data-trim class="javascript hljs">
+/* This file is located under: config/connections.js */
+someMysqlServer: {
+	adapter: "sails-mysql",
+	host: "localhost",
+	port: 3306,
+	user: "root",
+	password: "",
+	database: "midwestjs"
+},
+</code></pre>
+						</ul>
+					</section>
+					<section>
+						<h2>Configuration Continued</h2>
+						<p>Create the database in your <a target="_blank" href="http://localhost/phpmyadmin/">MySQL database</a></p>
+						<p>For this example the database should be called "midwestjs"</p>
+						<p>Now we need to tell Sails to use that database adapter</p>
+<pre><code data-trim class="javascript hljs">
+/* This file is located under: config/models.js */
+connection: 'someMysqlServer',
+</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Time to make and endpoint</h2>
+						<p>Lets create a person:</p>
+						<pre><code>sails generate api person</code></pre>
+						<p>Now open the newly created api/models/Person.js</p>
+						<p>Last but not least lets give the Person an Age and a Name</p>
+<pre><code data-trim class="javascript hljs">
+/* This file is located under: api/models/Person.js */
+attributes: {
+	age: "integer",
+	name: "string"
+}
+</code></pre>
+					</section>
+					<section>
+						<h2>Let's give it some data!</h2>
+						<h6>This is where the black magic begins</h6>
+						<p>The sample JSON blob:</p>
+<pre><code data-trim class="json hljs">
+{
+	"age": 100,
+	"name": "Sherpa"
+}
+</code></pre>
+						<p>We can either use POSTman or CURL to send this.</p>
+					</section>
+					<section>
+						<h2>Data Continued</h2>
+						<p>You'll get a nice JSON response back like:</p>
+<pre><code data-trim class="javascript hljs">
+{
+    "age": 100,
+    "name": "Sherpa",
+    "createdAt": "2015-08-09T22:08:00.708Z",
+    "updatedAt": "2015-08-09T22:08:00.708Z",
+    "id": 1
+}
+</code></pre>
+					<p>And now we can see that Person at:</p>
+					<p><a target="_blank" href="http://localhost:1337/person">http://localhost:1337/person</a></p>
+					</section>
+					<section>
+						<h2>Quick Model/API Review</h2>
+						<ol>
+							<li>Auto-created the schemea (with Alter)</li>
+							<li>Endpoint for all or individual</li>
+							<li>Pre-built responses upon success/failure</li>
+						</ol>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Where Sails makes backends a breeze</h2>
+
+						<ol>
+							<li>Sails comes with an Object-relational Mapping (ORM) called Waterline</li>
+							<li>Waterline helps with some of data model "heavy lifting"</li>
+							<li>Waterline also helps make your app database agnostic</li>
+							<li>Makes prototyping quick when using the Alter option for migrating data</li>
+						</ol>
+					</section>
+					<section>
+						<h2>Expanding on our Models</h2>
+						<ol>
+							<li>Add "alter" to config/models.js</li>
+							<li>Add another attribute to api/models/Person.js</li>
+							<li>Lift it, hit it with data, and check out your database</li>
+							<li>And now we can look at Blueprints config/blueprint.js</li>
+							<li><p><a target="_blank" href="http://localhost:1337/person/1">http://localhost:1337/person/1</a> and </p><p><a target="_blank" href="http://localhost:1337/person/2">http://localhost:1337/person/2</a></p></li>
+						</ol>
+					</section>
+					<section>
+						<h2>Associating two models</h2>
+						<small>I'm getting close to matching the official docs example.</small>
+						<ol>
+							<li>Let's give the Person a pet</li>
+							<li><pre><code>sails generate api pet</code></pre></li>
+							<li>
+<pre><code data-trim class="javascript hljs">
+/* This file is located under: api/models/Pet.js */
+attributes: {
+	name: "string",
+	trait: "string"
+}
+</code></pre></li>
+							<li></li>
+							<li></li>
+							<li></li>
+						</ol>
+					</section>
+				</section>
+<!-- template -->
+				<section>
+					<h2></h2>
+<pre><code data-trim class="javascript hljs">
+
+</code></pre>
+					<ol>
+						<li></li>
+						<li></li>
+						<li></li>
+						<li></li>
+						<li><pre><code>sails generate api person</code></pre></li>
+					</ol>
+				</section>
+
+				<section>
+					<h1>Thank you</h1>
+
+					<p><a href="https://twitter.com/crolek">twitter.com/crolek></a></p>
+					<p><a href="https://github.com/crolek">github.com/crolek></a></p>
+					<p><a href="https://chuckrolek.com">ChuckRolek.com</a></p>
+					<p>chuck@chuckrolek.com</p>
+				</section>
+			</div>
+
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
