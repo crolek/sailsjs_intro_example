@@ -30,6 +30,11 @@
 				document.getElementsByTagName( 'head' )[0].appendChild( link );
 			}
 		</script>
+		<style>
+			strong {
+				color: #E6DB74;
+			}
+		</style>
 
 		<!--[if lt IE 9]>
 		<script src="lib/js/html5shiv.js"></script>
@@ -53,21 +58,20 @@
 
 				<section>
 					<h3>Principal Financial Group</h3>
-					<h3>Front-end Development team</h3>
+					<h3>Software Engineer</h3>
 					<ul>
 						<li>Front-end architecture</li>
 						<li>Component development</li>
 						<li>Training</li>
-						<li>Infrastructure integration</li>
-						<li>Continuous Integration and app deployment</li>
+						<li>Infrastructure and app development</li>
 						<li>UX Support</li>
 					</ul>
 					<br></br>
 					<h3>IowaComputerGurus</h3>
 					<h3>User Experience and Efficiency Engineer</h3>
 					<ul>
-						<li>Posting sensor data from an Arduino to a server</li>
-						<li>Receiving data and sending it to hardware</li>
+						<li>Multi-channel Arduino/Xbee sensor reading</li>
+						<li>Raspberry Pi and hardware integration</li>
 						<li>Cordova development</li>
 					</ul>
 				</section>
@@ -76,7 +80,7 @@
 					<section>
 						<h2>The Problem</h2>
 						<ul>
-							<li>Separated development and integration</li>
+							<li>Need to test integration with backends that didn't exist yet</li>
 							<li>Needed some way to make quick backends</li>
 							<li>Tried a few Nodejs REST frameworks and didn't like them</li>
 						</ul>
@@ -98,11 +102,18 @@
 						<h2>What I'll cover</h2>
 						<ul>
 							<li><a target="_blank" href="http://sailsjs.org/documentation/concepts/">Sails Documentation</a></li>
-							<li>Creating a quick project and endpoint</li>
+							<li>Creating a quick project</li>
+							<li>Creating a model</li>
 							<li>Config settings</li>
-							<li>Endpoints</li>
 							<li>ORM (Waterline)</li>
+							<li>Endpoints/Blueprints</li>
+							<li><a target="_blank" href="https://github.com/sgress454/sails-hook-autoreload">https://github.com/sgress454/sails-hook-autoreload</a></li>
 						</ul>
+					</section>
+					<section>
+						<h2>The Goal</h2>
+						<br></br>
+						<p>You can go home and have a simple Sails app up and running with <strong>less headaches</strong> than I had to deal with it.</p>
 					</section>
 					<!-- <section>
 						<h2>Quick note before we get to far</h2>
@@ -150,23 +161,27 @@ someMysqlServer: {
 					</section>
 					<section>
 						<h2>Configuration Continued</h2>
-						<p>Create the database in your <a target="_blank" href="http://localhost/phpmyadmin/">MySQL database</a></p>
-						<p>For this example the database should be called "midwestjs"</p>
-						<p>Now we need to tell Sails to use that database adapter</p>
+						<ol>
+							<li>Create the database in your <a target="_blank" href="http://localhost/phpmyadmin/">MySQL database</a></li>
+							<li>For this example the database should be called "midwestjs"</li>
+							<li>Now we need to tell Sails to use that database adapter</li>
 <pre><code data-trim class="javascript hljs">
 /* This file is located under: config/models.js */
 connection: 'someMysqlServer',
 </code></pre>
+						</ol>
 					</section>
 				</section>
 
 				<section>
 					<section>
 						<h2>Time to make and endpoint</h2>
-						<p>Lets create a person:</p>
-						<pre><code>sails generate api person</code></pre>
-						<p>Now open the newly created api/models/Person.js</p>
-						<p>Last but not least lets give the Person an Age and a Name</p>
+
+						<ol>
+							<li>Lets create a person:</li>
+							<pre><code>sails generate api person</code></pre>
+							<li>Now open the newly created api/models/Person.js</li>
+							<li>Last but not least lets give the Person an Age and a Name</li>
 <pre><code data-trim class="javascript hljs">
 /* This file is located under: api/models/Person.js */
 attributes: {
@@ -174,10 +189,12 @@ attributes: {
 	name: "string"
 }
 </code></pre>
+						</ol>
 					</section>
 					<section>
 						<h2>Let's give it some data!</h2>
-						<h6>This is where the black magic begins</h6>
+						<small>This is where our "sails" start to pick up wind. ARrrr!</small>
+						<br></br>
 						<p>The sample JSON blob:</p>
 <pre><code data-trim class="json hljs">
 {
@@ -186,6 +203,10 @@ attributes: {
 }
 </code></pre>
 						<p>We can either use POSTman or CURL to send this.</p>
+					</section>
+					<section>
+						<h2><a target="_blank" href="https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop?hl=en">Postman</a></h2>
+						<img src="images/postman.png">
 					</section>
 					<section>
 						<h2>Data Continued</h2>
@@ -236,7 +257,7 @@ attributes: {
 						<h2>Associating two models</h2>
 						<small>I'm getting close to matching the official docs example.</small>
 						<ol>
-							<li>Let's give the Person a pet</li>
+							<li>Let's give the Person the ability to own one Pet</li>
 							<li><pre><code>sails generate api pet</code></pre></li>
 							<li>
 <pre><code data-trim class="javascript hljs">
@@ -246,9 +267,39 @@ attributes: {
 	trait: "string"
 }
 </code></pre></li>
-							<li></li>
-							<li></li>
-							<li></li>
+							<li>Now lets update Person model to own a Pet
+<pre><code data-trim class="javascript hljs">
+attributes: {
+	pet: {
+	    model: "pet"
+	},
+	age: "integer",
+	name: "string",
+	location: "string"
+}
+</code></pre>
+							</li>
+
+						</ol>
+					</section>
+					<section>
+						<ol>
+							<li>Re-lift and post this at <a target="_blank" href="http://localhost:1337/person">localhost:1337/person</a>
+								<br>This will automatically associate the Person with that Pet.</li>
+<pre><code data-trim class="json hljs">
+{
+	"age": 200,
+	"name": "Super Sherpa",
+	"location": "Iowa",
+	"pet": {
+		    "name": "Stewie",
+		    "trait": "fluffy"
+	}
+}
+</code></pre>								
+							
+							<li>Person has a new Person with a Pet: <a target="_blank" href="http://localhost:1337/person">localhost:1337/person</a></li>
+							<li>Pet now has a new Pet: <a target="_blank" href="http://localhost:1337/pet/1">localhost:1337/pet/1</a></li>
 						</ol>
 					</section>
 				</section>
@@ -270,10 +321,9 @@ attributes: {
 				<section>
 					<h1>Thank you</h1>
 
-					<p><a href="https://twitter.com/crolek">twitter.com/crolek></a></p>
-					<p><a href="https://github.com/crolek">github.com/crolek></a></p>
+					<p><a href="https://twitter.com/crolek">twitter.com/crolek</a></p>
+					<p><a href="https://github.com/crolek">github.com/crolek</a></p>
 					<p><a href="https://chuckrolek.com">ChuckRolek.com</a></p>
-					<p>chuck@chuckrolek.com</p>
 				</section>
 			</div>
 
