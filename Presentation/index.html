@@ -52,23 +52,16 @@
 				
 				<section>
 					<h2>Chuck Rolek</h2>
-					<h3>Front-end Development</h3>
-					<h3>and Infrastructure (DevOps)</h3>
-				</section>
-
-				<section>
+					<br></br>
 					<h3>Principal Financial Group</h3>
-					<h3>Software Engineer</h3>
 					<ul>
 						<li>Front-end architecture</li>
-						<li>Component development</li>
 						<li>Training</li>
 						<li>Infrastructure and app development</li>
 						<li>UX Support</li>
 					</ul>
 					<br></br>
 					<h3>IowaComputerGurus</h3>
-					<h3>User Experience and Efficiency Engineer</h3>
 					<ul>
 						<li>Multi-channel Arduino/Xbee sensor reading</li>
 						<li>Raspberry Pi and hardware integration</li>
@@ -83,6 +76,7 @@
 							<li>Need to test integration with backends that didn't exist yet</li>
 							<li>Needed some way to make quick backends</li>
 							<li>Tried a few Nodejs REST frameworks and didn't like them</li>
+							<li>I wasn't what you'd call a full-stack developer</li>
 						</ul>
 					</section>
 					<section>
@@ -103,17 +97,18 @@
 						<ul>
 							<li><a target="_blank" href="http://sailsjs.org/documentation/concepts/">Sails Documentation</a></li>
 							<li>Creating a quick project</li>
-							<li>Creating a model</li>
+							<li>Creating an API</li>
 							<li>Config settings</li>
 							<li>ORM (Waterline)</li>
 							<li>Endpoints/Blueprints</li>
 							<li><a target="_blank" href="https://github.com/sgress454/sails-hook-autoreload">https://github.com/sgress454/sails-hook-autoreload</a></li>
+							<li>Misc</li>
 						</ul>
 					</section>
 					<section>
 						<h2>The Goal</h2>
 						<br></br>
-						<p>You can go home and have a simple Sails app up and running with <strong>less headaches</strong> than I had to deal with it.</p>
+						<p>You can go home and have a simple Sails app up and running with <strong>less headaches</strong> than what I ran into.</p>
 					</section>
 					<!-- <section>
 						<h2>Quick note before we get to far</h2>
@@ -128,15 +123,20 @@
 				</section>
 
 				<section>
-					<h2>Creating a quick project</h2>
-					<ol>
-						<li><a target="_blank" href="http://sailsjs.org/get-started">Installing Sails</a></li>
-						<li><pre><code>sails new midwestjs</code></pre></li>
-						<li><pre><code>cd midwestjs</code></pre></li>
-						<li><pre><code>sails lift</code></pre></li>
-						<li><a target="_blank" href="http://localhost:1337">Go to http://localhost:1337/</a></li>
-					</ol>
-
+					<section>
+						<h2>So you can review it later</h2>
+						<p><a target="_blank" href="https://github.com/crolek/sailsjs_intro_example">https://github.com/crolek/sailsjs_intro_example</a></p>
+					</section>
+					<section>
+						<h2>Creating a quick project</h2>
+						<ol>
+							<li><a target="_blank" href="http://sailsjs.org/get-started">Installing Sails</a></li>
+							<li><pre><code>sails new midwestjs</code></pre></li>
+							<li><pre><code>cd midwestjs</code></pre></li>
+							<li><pre><code>sails lift</code></pre></li>
+							<li><a target="_blank" href="http://localhost:1337">Go to http://localhost:1337/</a></li>
+						</ol>
+					</section>
 				</section>
 				<section>
 					<section>
@@ -189,6 +189,8 @@ attributes: {
 	name: "string"
 }
 </code></pre>
+							<li>sails lift</li>
+							<li>Our new API is: <a target="_blank" href="http://localhost:1337/person">http://localhost:1337/person</a></li>
 						</ol>
 					</section>
 					<section>
@@ -202,7 +204,7 @@ attributes: {
 	"name": "Sherpa"
 }
 </code></pre>
-						<p>We can either use POSTman or CURL to send this.</p>
+						<p>We can either use Postman or CURL to send this.</p>
 					</section>
 					<section>
 						<h2><a target="_blank" href="https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop?hl=en">Postman</a></h2>
@@ -222,12 +224,13 @@ attributes: {
 </code></pre>
 					<p>And now we can see that Person at:</p>
 					<p><a target="_blank" href="http://localhost:1337/person">http://localhost:1337/person</a></p>
+					<p>Now lets look at the database!</p>
 					</section>
 					<section>
 						<h2>Quick Model/API Review</h2>
 						<ol>
-							<li>Auto-created the schemea (with Alter)</li>
-							<li>Endpoint for all or individual</li>
+							<li>Auto-created the schema (with Alter)</li>
+							<li>API for Person</li>
 							<li>Pre-built responses upon success/failure</li>
 						</ol>
 					</section>
@@ -247,7 +250,15 @@ attributes: {
 						<h2>Expanding on our Models</h2>
 						<ol>
 							<li>Add "alter" to config/models.js</li>
+<pre><code data-trim class="javascript hljs">
+migrate: 'alter'
+</code></pre>
 							<li>Add another attribute to api/models/Person.js</li>
+<pre><code data-trim class="javascript hljs">
+age: "integer",
+name: "string",
+location: "string"
+</code></pre>
 							<li>Lift it, hit it with data, and check out your database</li>
 							<li>And now we can look at Blueprints config/blueprint.js</li>
 							<li><p><a target="_blank" href="http://localhost:1337/person/1">http://localhost:1337/person/1</a> and </p><p><a target="_blank" href="http://localhost:1337/person/2">http://localhost:1337/person/2</a></p></li>
@@ -267,8 +278,9 @@ attributes: {
 	trait: "string"
 }
 </code></pre></li>
-							<li>Now lets update Person model to own a Pet
+							<li>Now lets update Person model to own a Pet (one to one)
 <pre><code data-trim class="javascript hljs">
+/* This file is located under: api/models/Person.js */
 attributes: {
 	pet: {
 	    model: "pet"
@@ -302,20 +314,70 @@ attributes: {
 							<li>Pet now has a new Pet: <a target="_blank" href="http://localhost:1337/pet/1">localhost:1337/pet/1</a></li>
 						</ol>
 					</section>
+					<section>
+						<h2>Stewie</h2>
+						<img src="images/Stewie1.jpg">
+					</section>
 				</section>
 <!-- template -->
 				<section>
-					<h2></h2>
-<pre><code data-trim class="javascript hljs">
+					<section>
 
+						<h2>The "quick" development cycle</h2>
+						<ol>
+							<li>Change model/controller</li>
+							<li>shutdown sails, sails lift</li>
+							<li>Change model/controller</li>
+							<li>shutdown sails, sails lift</li>
+							<li>typo something silly in your model</li>
+							<li>shutdown sails, sails lift</li>
+							<li>Realize your data associating is wrong</li>
+							<li>shutdown sails, sails lift</li>
+						</ol>
+						<br></br>
+						<p>Boring eh?</p>
+					</section>
+					<section>
+						<h2>Sails autoreload</h2>
+						<p><a target="_blank" href="https://github.com/sgress454/sails-hook-autoreload">https://github.com/sgress454/sails-hook-autoreload</a></p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Misc</h2>
+						<ul>
+							<li>Namespacing your API
+<pre><code data-trim class="javascript hljs">
+/* This file is located under: config/blueprints.js */
+prefix: "/api",
 </code></pre>
-					<ol>
-						<li></li>
-						<li></li>
-						<li></li>
-						<li></li>
-						<li><pre><code>sails generate api person</code></pre></li>
-					</ol>
+							Pro-tip: You'll have to re-lift even with the reloader
+							</li>
+							<li><a target="_blank" href="http://sailsjs.org/documentation/concepts/models-and-orm/validations">Model Validations</a></li>
+						</ul>
+					</section>
+					<section>
+						<h2>Curl</h2>
+
+						<ul>
+							<li>Open a command prompt</li>
+							<li>Save that off as testData.json
+<pre><code data-trim class="json hljs">
+{
+	"name": "Curl",
+	"age": 1,
+	"location": "your project folder"
+}
+</code></pre>
+							</li>
+							<li>Either save this off as something like a curl.bat file or simply run the command.
+<pre><code data-trim class="javascript hljs">
+curl -X POST -H "Content-Type: application/json" -d @testData.json http://localhost:1337/person
+</code></pre>
+							If you added the "/api" prefix in the Blueprints file you'll want to add that to the url.
+							</li>
+						</ul>
+					</section>
 				</section>
 
 				<section>
